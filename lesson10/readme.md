@@ -71,3 +71,13 @@ SELECT pg_reload_conf();
 Игнорируем ошибку - данные доступны (измененные).
 
 ![Игнорируем ошибку](ignore_error.png)
+
+insert into test1 values(3,'test345');
+ 
+alter system set ignore_checksum_failure = off;
+
+SELECT pg_reload_conf();
+
+Ошибка контрольной суммы затёрта новым значением.
+
+![Ошибка затёрта](no_error.png)
