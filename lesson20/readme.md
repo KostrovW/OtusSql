@@ -81,3 +81,14 @@
 	postgres_air|boarding_pass_range_202306|postgres  |          |true      |false   |true       |false      |
 	postgres_air|boarding_pass_range_202307|postgres  |          |true      |false   |true       |false      |
 	postgres_air|boarding_pass_range_202308|postgres  |          |true      |false   |true       |false      |
+
+-- проверяем логику перенаправления запроса в секцию
+
+	explain select * from postgres_air.boarding_pass bp where bp.boarding_time = ('2023-06-02 09:00:00'::timestamptz);
+	
+	QUERY PLAN                                                                                        |
+	--------------------------------------------------------------------------------------------------+
+	Gather  (cost=1000.00..177402.40 rows=1410 width=40)                                              |
+	  Workers Planned: 2                                                                              |
+	  ->  Parallel Seq Scan on boarding_pass_range_202306 bp  (cost=0.00..176261.40 rows=588 width=40)|
+			Filter: (boarding_time = '2023-06-02 09:00:00+03'::timestamp with time zone)              |
